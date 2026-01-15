@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+
+	"github.com/dinhphu28/dictionary"
 )
 
 // App struct
@@ -24,4 +26,9 @@ func (a *App) startup(ctx context.Context) {
 // Greet returns a greeting for the given name
 func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
+}
+
+func (a *App) Lookup(word string) (dictionary.LookupResultWithSuggestion, error) {
+	result, err := dictionary.Lookup(word)
+	return result, err
 }

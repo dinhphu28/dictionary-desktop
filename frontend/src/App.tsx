@@ -1,28 +1,86 @@
-import {useState} from 'react';
-import logo from './assets/images/logo-universal.png';
-import './App.css';
-import {Greet} from "../wailsjs/go/main/App";
+import { useState } from "react";
+import "./App.css";
+import "./DefaultStyle.css";
+import "./CustomStyle.css";
+import { Lookup } from "../wailsjs/go/main/App";
+import { dictionary } from "../wailsjs/go/models";
 
 function App() {
-    const [resultText, setResultText] = useState("Please enter your name below 👇");
-    const [name, setName] = useState('');
-    const updateName = (e: any) => setName(e.target.value);
-    const updateResultText = (result: string) => setResultText(result);
+  const [dictResult, setDictResult] =
+    useState<dictionary.LookupResultWithSuggestion | null>(null);
+  const [word, setWord] = useState("");
+  const updateWord = (e: any) => setWord(e.target.value);
+  const updateDictResult = (result: dictionary.LookupResultWithSuggestion) =>
+    setDictResult(result);
 
-    function greet() {
-        Greet(name).then(updateResultText);
-    }
+  const lookup = () => {
+    Lookup(word).then((result: dictionary.LookupResultWithSuggestion) => {
+      console.log("WORD: " + word);
+      console.log(result);
+      updateDictResult(result);
+    });
+  };
 
+  const metaSentence = () => {
     return (
-        <div id="App">
-            <img src={logo} id="logo" alt="logo"/>
-            <div id="result" className="result">{resultText}</div>
-            <div id="input" className="input-box">
-                <input id="name" className="input" onChange={updateName} autoComplete="off" name="input" type="text"/>
-                <button className="btn" onClick={greet}>Greet</button>
-            </div>
+      <div className="suggest-sentence">
+        <i>
+          Did you mean: <b>HELLO</b>
+        </i>
+      </div>
+    );
+  };
+
+  const renderSetOfDictResult = (results: Array<dictionary.LookupResult>) => {
+    const resultHtml = results.map((dict) => (
+      <div className="dictionary-section">
+        <div className="dictionary-header">
+          {dict.dictionary || dict.full_name}
         </div>
-    )
+
+        {dict.entries.map((entry) => (
+          <div className="dictionary-entry">
+            <div
+              className="entry-body"
+              data-expanded="false"
+              dangerouslySetInnerHTML={{ __html: entry.html }}
+            ></div>
+          </div>
+        ))}
+      </div>
+    ));
+    return resultHtml;
+  };
+
+  return (
+    <div id="App">
+      <div id="result" className="result">
+        Please enter your headword below 👇
+      </div>
+      <div id="input" className="input-box">
+        <input
+          id="name"
+          className="input"
+          onChange={updateWord}
+          autoComplete="off"
+          name="input"
+          type="text"
+        />
+        <button className="btn" onClick={lookup}>
+          Lookup
+        </button>
+      </div>
+      <div>
+        <div>{metaSentence()}</div>
+        <br />
+        <div>
+          {dictResult === null
+            ? "Error cause when lookup word!"
+            : renderSetOfDictResult(dictResult.lookup_results)}
+        </div>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
