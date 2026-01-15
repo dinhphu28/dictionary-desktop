@@ -1,34 +1,39 @@
 import { useState } from "react";
-import "./App.css";
 import "./DefaultStyle.css";
 import "./CustomStyle.css";
-import { Lookup } from "../wailsjs/go/main/App";
 import { dictionary } from "../wailsjs/go/models";
+import LookupBar from "./components/LookupBar";
 
 function App() {
   const [dictResult, setDictResult] =
     useState<dictionary.LookupResultWithSuggestion | null>(null);
-  const [word, setWord] = useState("");
-  const updateWord = (e: any) => setWord(e.target.value);
-  const updateDictResult = (result: dictionary.LookupResultWithSuggestion) =>
-    setDictResult(result);
 
-  const lookup = () => {
-    Lookup(word).then((result: dictionary.LookupResultWithSuggestion) => {
-      console.log("WORD: " + word);
-      console.log(result);
-      updateDictResult(result);
-    });
+  const handleLookup = (result: dictionary.LookupResultWithSuggestion) => {
+    setDictResult(result);
   };
 
+  const MatchType = {
+    EXACT_MATCH: 1,
+    APPROXIMATE_MATCH: 2,
+  };
+
+  // if (dictResult?.lookup_results?.length ?? 0 === 0) {
+  //   return <i>No entry found for "WORD".</i>;
+  // }
+
   const metaSentence = () => {
-    return (
-      <div className="suggest-sentence">
-        <i>
-          Did you mean: <b>HELLO</b>
-        </i>
-      </div>
-    );
+    const suggestWord = dictResult?.suggestions?.at(0);
+
+    if (suggestWord != null) {
+      return (
+        <div className="suggest-sentence">
+          <i>
+            Did you mean: <b>{suggestWord}</b>?
+          </i>
+        </div>
+      );
+    }
+    return "";
   };
 
   const renderSetOfDictResult = (results: Array<dictionary.LookupResult>) => {
@@ -57,26 +62,14 @@ function App() {
       <div id="result" className="result">
         Please enter your headword below 👇
       </div>
-      <div id="input" className="input-box">
-        <input
-          id="name"
-          className="input"
-          onChange={updateWord}
-          autoComplete="off"
-          name="input"
-          type="text"
-        />
-        <button className="btn" onClick={lookup}>
-          Lookup
-        </button>
-      </div>
+      <LookupBar onLookupResult={handleLookup} />
       <div>
         <div>{metaSentence()}</div>
         <br />
         <div>
-          {dictResult === null
-            ? "Error cause when lookup word!"
-            : renderSetOfDictResult(dictResult.lookup_results)}
+          {dictResult != null
+            ? renderSetOfDictResult(dictResult.lookup_results)
+            : "Error cause when lookup word!"}
         </div>
       </div>
     </div>
