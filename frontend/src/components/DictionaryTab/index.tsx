@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { dictionaryTab } from "./model";
+import "./style.css";
 
 interface DictionaryTabProps {
   dictionaries: Array<dictionaryTab.DictionarySelection>;
