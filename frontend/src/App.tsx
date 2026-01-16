@@ -3,13 +3,20 @@ import "./DefaultStyle.css";
 import "./CustomStyle.css";
 import { dictionary } from "../wailsjs/go/models";
 import LookupBar from "./components/LookupBar";
+import DictionaryTab from "./components/DictionaryTab";
+import { dictionaryTab } from "./components/DictionaryTab/model";
 
 function App() {
   const [dictResult, setDictResult] =
     useState<dictionary.LookupResultWithSuggestion | null>(null);
+  const [selectedDict, setSelectedDict] = useState("oxford_american");
 
   const handleLookup = (result: dictionary.LookupResultWithSuggestion) => {
     setDictResult(result);
+  };
+
+  const handleDictSelection = (dictId: string) => {
+    setSelectedDict(dictId);
   };
 
   const MatchType = {
@@ -37,13 +44,17 @@ function App() {
   };
 
   const renderSetOfDictResult = (results: Array<dictionary.LookupResult>) => {
-    const resultHtml = results.map((dict) => (
+    return results.map(renderSelectedDictResult);
+  };
+
+  const renderSelectedDictResult = (result: dictionary.LookupResult) => {
+    return (
       <div className="dictionary-section">
         <div className="dictionary-header">
-          {dict.dictionary || dict.full_name}
+          {result.dictionary || result.full_name}
         </div>
 
-        {dict.entries.map((entry) => (
+        {result.entries.map((entry) => (
           <div className="dictionary-entry">
             <div
               className="entry-body"
@@ -53,9 +64,17 @@ function App() {
           </div>
         ))}
       </div>
-    ));
-    return resultHtml;
+    );
   };
+
+  const dictionarySelections =
+    dictResult?.lookup_results?.map(
+      (r) =>
+        new dictionaryTab.DictionarySelection({
+          id: r.id,
+          label: r.dictionary,
+        }),
+    ) ?? [];
 
   return (
     <div id="App">
@@ -63,6 +82,11 @@ function App() {
         Please enter your headword below 👇
       </div>
       <LookupBar onLookupResult={handleLookup} />
+      <DictionaryTab
+        dictionaries={dictionarySelections}
+        defaultDictionary={selectedDict}
+        onDictionarySelection={handleDictSelection}
+      />
       <div>
         <div>{metaSentence()}</div>
         <br />
