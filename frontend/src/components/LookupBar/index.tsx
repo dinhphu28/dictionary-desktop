@@ -1,14 +1,19 @@
 import React, { KeyboardEvent, useState } from "react";
 import { Lookup } from "../../../wailsjs/go/main/App";
 import { dictionary } from "../../../wailsjs/go/models";
+import DictionaryTab from "../DictionaryTab";
+import { dictionaryTab } from "../DictionaryTab/model";
+import LookupInput from "../LookupInput";
 import "./style.css";
 
 interface LookupBarProps {
   onLookupResult: (result: dictionary.LookupResultWithSuggestion) => void;
+  tabs: Array<dictionaryTab.DictionarySelection>;
 }
 
-const LookupBar: React.FC<LookupBarProps> = ({ onLookupResult }) => {
+const LookupBar: React.FC<LookupBarProps> = ({ onLookupResult, tabs }) => {
   const [word, setWord] = useState("");
+  const [selectedDict, setSelectedDict] = useState("oxford_american");
   const updateWord = (e: any) => setWord(e.target.value);
 
   const updateDictResult = (result: dictionary.LookupResultWithSuggestion) =>
@@ -29,31 +34,26 @@ const LookupBar: React.FC<LookupBarProps> = ({ onLookupResult }) => {
     }
   };
 
-  const clear = () => {
-    setWord("");
+  const handleDictSelection = (dictId: string) => {
+    setSelectedDict(dictId);
   };
 
   return (
     <div>
-      <div className="top-bar">
-        <header className="lookup-bar">
-          <span className="search-icon">🔍</span>
-          <input
-            id="name"
-            value={word}
-            className="lookup-input"
+      <header>
+        <div className="top-bar">
+          <LookupInput
+            className="lookup-bar"
             onChange={updateWord}
             onKeyDown={handleKeyDown}
-            autoComplete="off"
-            name="input"
-            type="text"
-            placeholder="Lookup"
           />
-          <button className="clear-btn" onClick={clear}>
-            x
-          </button>
-        </header>
-      </div>
+        </div>
+        {/* <DictionaryTab */}
+        {/*   dictionaries={tabs} */}
+        {/*   defaultDictionary={selectedDict} */}
+        {/*   onDictionarySelection={handleDictSelection} */}
+        {/* /> */}
+      </header>
     </div>
   );
 };
