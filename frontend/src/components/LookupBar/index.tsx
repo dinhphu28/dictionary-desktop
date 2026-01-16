@@ -1,41 +1,36 @@
 import React, { KeyboardEvent, useState } from "react";
 import { Lookup } from "../../../wailsjs/go/main/App";
 import { dictionary } from "../../../wailsjs/go/models";
-import DictionaryTab from "../DictionaryTab";
 import { dictionaryTab } from "../DictionaryTab/model";
 import LookupInput from "../LookupInput";
+import NavTab, { Tab } from "../NavTab";
 import "./style.css";
 
 interface LookupBarProps {
-  onLookupResult: (result: dictionary.LookupResultWithSuggestion) => void;
   tabs: Array<dictionaryTab.DictionarySelection>;
+  onLookup: (word: string) => void;
+  onDictionarySelect: (dictId: string) => void;
 }
 
-const LookupBar: React.FC<LookupBarProps> = ({ onLookupResult, tabs }) => {
+const LookupBar: React.FC<LookupBarProps> = ({ onLookup, tabs }) => {
   const [word, setWord] = useState("");
   const [selectedDict, setSelectedDict] = useState("oxford_american");
   const updateWord = (e: any) => setWord(e.target.value);
 
-  const updateDictResult = (result: dictionary.LookupResultWithSuggestion) =>
-    onLookupResult(result);
-
-  const lookup = () => {
-    Lookup(word).then((result: dictionary.LookupResultWithSuggestion) => {
-      console.log("WORD: " + word);
-      console.log(result);
-      updateDictResult(result);
-    });
-  };
-
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      lookup();
+      onLookup(word);
     }
   };
 
   const handleDictSelection = (dictId: string) => {
+    console.log("DICT: ", dictId);
     setSelectedDict(dictId);
+  };
+
+  const renderTabs = () => {
+    return tabs.map((tab) => <Tab value={tab.id} label={tab.label} />);
   };
 
   return (
@@ -48,11 +43,9 @@ const LookupBar: React.FC<LookupBarProps> = ({ onLookupResult, tabs }) => {
             onKeyDown={handleKeyDown}
           />
         </div>
-        {/* <DictionaryTab */}
-        {/*   dictionaries={tabs} */}
-        {/*   defaultDictionary={selectedDict} */}
-        {/*   onDictionarySelection={handleDictSelection} */}
-        {/* /> */}
+        <NavTab value={selectedDict} onChange={handleDictSelection}>
+          {renderTabs()}
+        </NavTab>
       </header>
     </div>
   );
