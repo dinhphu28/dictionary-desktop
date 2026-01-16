@@ -5,6 +5,7 @@ import LookupBar from "./components/LookupBar";
 import DictionaryTab from "./components/DictionaryTab";
 import { dictionaryTab } from "./components/DictionaryTab/model";
 import ContentArea from "./components/ContentArea";
+import LookupInput from "./components/LookupInput";
 
 function App() {
   const [dictResult, setDictResult] =
@@ -62,7 +63,9 @@ function App() {
 
   return (
     <div id="app" className="app">
-      <LookupBar onLookupResult={handleLookup} />
+      <LookupBar onLookupResult={handleLookup} 
+        tabs={dictionarySelections}
+      />
       <DictionaryTab
         dictionaries={dictionarySelections}
         defaultDictionary={selectedDict}
