@@ -3,7 +3,7 @@ module dictionary-desktop
 go 1.25.5
 
 require (
-	github.com/dinhphu28/dictionary v0.1.1
+	github.com/dinhphu28/dictionary v0.1.2-rc.3
 	github.com/wailsapp/wails/v2 v2.11.0
 	modernc.org/sqlite v1.44.0
 )
