@@ -1,0 +1,16 @@
+#app {
+  height: 100vh;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.main-layout {
+  flex: 1;
+  min-height: 0; /* 🔥 REQUIRED for scrolling children */
+  overflow: hidden;
+}
+

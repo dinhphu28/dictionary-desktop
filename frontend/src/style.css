@@ -11,6 +11,11 @@ body {
     sans-serif;
 }
 
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
 @font-face {
     font-family: "Nunito";
     font-style: normal;
@@ -21,5 +26,4 @@ body {
 
 #app {
     height: 100vh;
-    text-align: center;
 }

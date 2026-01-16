@@ -1,10 +1,10 @@
 import { useState } from "react";
-import "./DefaultStyle.css";
-import "./CustomStyle.css";
 import { dictionary } from "../wailsjs/go/models";
+import "./App.css";
 import LookupBar from "./components/LookupBar";
 import DictionaryTab from "./components/DictionaryTab";
 import { dictionaryTab } from "./components/DictionaryTab/model";
+import ContentArea from "./components/ContentArea";
 
 function App() {
   const [dictResult, setDictResult] =
@@ -19,14 +19,14 @@ function App() {
     setSelectedDict(dictId);
   };
 
+  const handleSelectSuggestWord = (word: string) => {
+    console.log(word);
+  };
+
   const MatchType = {
     EXACT_MATCH: 1,
     APPROXIMATE_MATCH: 2,
   };
-
-  // if (dictResult?.lookup_results?.length ?? 0 === 0) {
-  //   return <i>No entry found for "WORD".</i>;
-  // }
 
   const metaSentence = () => {
     const suggestWord = dictResult?.suggestions?.at(0);
@@ -43,28 +43,12 @@ function App() {
     return "";
   };
 
-  const renderSetOfDictResult = (results: Array<dictionary.LookupResult>) => {
-    return results.map(renderSelectedDictResult);
-  };
-
-  const renderSelectedDictResult = (result: dictionary.LookupResult) => {
-    return (
-      <div className="dictionary-section">
-        <div className="dictionary-header">
-          {result.dictionary || result.full_name}
-        </div>
-
-        {result.entries.map((entry) => (
-          <div className="dictionary-entry">
-            <div
-              className="entry-body"
-              data-expanded="false"
-              dangerouslySetInnerHTML={{ __html: entry.html }}
-            ></div>
-          </div>
-        ))}
-      </div>
-    );
+  const getSelectedDictResult = (results: Array<dictionary.LookupResult>) => {
+    const currentRes = results.find((r) => r.id === selectedDict);
+    if (currentRes == null) {
+      throw "Selected dictionary not found in the results!";
+    }
+    return currentRes;
   };
 
   const dictionarySelections =
@@ -77,7 +61,7 @@ function App() {
     ) ?? [];
 
   return (
-    <div id="App">
+    <div id="app" className="app">
       <div id="result" className="result">
         Please enter your headword below 👇
       </div>
@@ -87,14 +71,16 @@ function App() {
         defaultDictionary={selectedDict}
         onDictionarySelection={handleDictSelection}
       />
-      <div>
-        <div>{metaSentence()}</div>
-        <br />
-        <div>
-          {dictResult != null
-            ? renderSetOfDictResult(dictResult.lookup_results)
-            : "Error cause when lookup word!"}
-        </div>
+      <div className="main-layout">
+        {dictResult != null ? (
+          <ContentArea
+            suggestions={dictResult.suggestions}
+            dictionaryResult={getSelectedDictResult(dictResult.lookup_results)}
+            onSuggestionSelection={handleSelectSuggestWord}
+          />
+        ) : (
+          "Error cause when lookup word!"
+        )}
       </div>
     </div>
   );

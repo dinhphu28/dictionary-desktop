@@ -31,18 +31,21 @@ const LookupBar: React.FC<LookupBarProps> = ({ onLookupResult }) => {
   return (
     <div>
       <div id="input" className="input-box">
-        <input
-          id="name"
-          className="input"
-          onChange={updateWord}
-          onKeyDown={handleKeyDown}
-          autoComplete="off"
-          name="input"
-          type="text"
-        />
-        <button className="btn" onClick={lookup}>
-          Lookup
-        </button>
+        <header className="lookup-bar">
+          <input
+            id="name"
+            className="lookup-input"
+            onChange={updateWord}
+            onKeyDown={handleKeyDown}
+            autoComplete="off"
+            name="input"
+            type="text"
+            placeholder="🔍 Lookup"
+          />
+          <button className="btn" onClick={lookup}>
+            🔍
+          </button>
+        </header>
       </div>
     </div>
   );
