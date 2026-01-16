@@ -1,6 +1,7 @@
 import React, { KeyboardEvent, useState } from "react";
 import { Lookup } from "../../../wailsjs/go/main/App";
 import { dictionary } from "../../../wailsjs/go/models";
+import "./style.css";
 
 interface LookupBarProps {
   onLookupResult: (result: dictionary.LookupResultWithSuggestion) => void;
@@ -28,22 +29,28 @@ const LookupBar: React.FC<LookupBarProps> = ({ onLookupResult }) => {
     }
   };
 
+  const clear = () => {
+    setWord("");
+  };
+
   return (
     <div>
-      <div id="input" className="input-box">
+      <div className="top-bar">
         <header className="lookup-bar">
+          <span className="search-icon">🔍</span>
           <input
             id="name"
+            value={word}
             className="lookup-input"
             onChange={updateWord}
             onKeyDown={handleKeyDown}
             autoComplete="off"
             name="input"
             type="text"
-            placeholder="🔍 Lookup"
+            placeholder="Lookup"
           />
-          <button className="btn" onClick={lookup}>
-            🔍
+          <button className="clear-btn" onClick={clear}>
+            x
           </button>
         </header>
       </div>

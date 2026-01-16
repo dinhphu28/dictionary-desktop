@@ -62,9 +62,6 @@ function App() {
 
   return (
     <div id="app" className="app">
-      <div id="result" className="result">
-        Please enter your headword below 👇
-      </div>
       <LookupBar onLookupResult={handleLookup} />
       <DictionaryTab
         dictionaries={dictionarySelections}
