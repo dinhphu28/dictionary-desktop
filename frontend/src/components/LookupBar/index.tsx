@@ -42,21 +42,19 @@ const LookupBar: React.FC<LookupBarProps> = ({
   };
 
   return (
-    <div>
-      <header>
-        <div className="top-bar">
-          <LookupInput
-            value={localWord}
-            className="lookup-bar"
-            onChange={updateLocalWord}
-            onKeyDown={handleKeyDown}
-          />
-        </div>
-        <NavTab value={dictionaryId} onChange={handleDictSelection}>
-          {renderTabs()}
-        </NavTab>
-      </header>
-    </div>
+    <header>
+      <div className="top-bar">
+        <LookupInput
+          value={localWord}
+          className="lookup-bar"
+          onChange={updateLocalWord}
+          onKeyDown={handleKeyDown}
+        />
+      </div>
+      <NavTab value={dictionaryId} onChange={handleDictSelection}>
+        {renderTabs()}
+      </NavTab>
+    </header>
   );
 };
 
