@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { dictionary } from "../../../wailsjs/go/models";
 import DictionaryContent from "../DictionaryContent";
+import SuggestionBar from "../SuggestionBar";
 import "./style.css";
 
 interface ContentAreaProps {
@@ -14,33 +15,22 @@ const ContentArea: React.FC<ContentAreaProps> = ({
   dictionaryResult,
   onSuggestionSelection,
 }) => {
-  const [currentWord, setCurrentWord] = useState(suggestions[0]);
-
   const changeSelection = (word: string) => {
-    setCurrentWord(word);
     onSuggestionSelection(word);
-  };
-
-  const renderSuggestions = () => {
-    return suggestions.map((word) => {
-      const isActive = word === currentWord;
-      return (
-        <li
-          key={word}
-          className={`suggestion-item ${isActive ? "active" : ""}`}
-          tabIndex={0}
-          onClick={(_) => changeSelection(word)}
-        >
-          {word}
-        </li>
-      );
-    });
   };
 
   return (
     <section className="content-area">
       <aside className="suggestions">
-        <ul className="suggestion-list">{renderSuggestions()}</ul>
+        {suggestions.length > 0 ? (
+          <SuggestionBar
+            suggestions={suggestions}
+            value={suggestions[0]}
+            onChange={changeSelection}
+          />
+        ) : (
+          ""
+        )}
       </aside>
       <main className="definition-view">
         <DictionaryContent dictionaryResult={dictionaryResult} />
