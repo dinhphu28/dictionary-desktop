@@ -1,24 +1,30 @@
-import React, { KeyboardEvent, useState } from "react";
+import React, { KeyboardEvent, useEffect, useState } from "react";
 import "./style.css";
 
 interface LookupInputProps {
+  value: string;
   className: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const LookupInput: React.FC<LookupInputProps> = ({
+  value,
   className,
   onChange,
   onKeyDown,
 }) => {
-  const [word, setWord] = useState("");
+  const [word, setWord] = useState(value);
   const updateWord = (e: React.ChangeEvent<HTMLInputElement>) =>
     setWord(e.target.value);
 
   const clear = () => {
     setWord("");
   };
+
+  useEffect(() => {
+    setWord(value);
+  }, [value]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateWord(e);
