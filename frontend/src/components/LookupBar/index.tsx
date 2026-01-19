@@ -7,35 +7,31 @@ import NavTab, { Tab } from "../NavTab";
 import "./style.css";
 
 interface LookupBarProps {
+  word: string;
   tabs: Array<dictionaryTab.DictionarySelection>;
   onLookup: (word: string) => void;
+  dictionaryId: string;
   onDictionarySelect: (dictId: string) => void;
 }
 
 const LookupBar: React.FC<LookupBarProps> = ({
+  word,
   tabs,
   onLookup,
+  dictionaryId,
   onDictionarySelect,
 }) => {
-  const [word, setWord] = useState("");
-  const [selectedDict, setSelectedDict] = useState("oxford_american");
-  const updateWord = (e: any) => setWord(e.target.value);
-
-  useEffect(() => {
-    console.log("LookupBar has been rendered!");
-  });
-  console.log("LookupBar has been RENDERED!");
+  let localWord = word;
+  const updateLocalWord = (e: any) => (localWord = e.target.value);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      onLookup(word);
+      onLookup(localWord);
     }
   };
 
   const handleDictSelection = (dictId: string) => {
-    console.log("DICT: ", dictId);
-    setSelectedDict(dictId);
     onDictionarySelect(dictId);
   };
 
@@ -50,12 +46,13 @@ const LookupBar: React.FC<LookupBarProps> = ({
       <header>
         <div className="top-bar">
           <LookupInput
+            value={localWord}
             className="lookup-bar"
-            onChange={updateWord}
+            onChange={updateLocalWord}
             onKeyDown={handleKeyDown}
           />
         </div>
-        <NavTab value={selectedDict} onChange={handleDictSelection}>
+        <NavTab value={dictionaryId} onChange={handleDictSelection}>
           {renderTabs()}
         </NavTab>
       </header>

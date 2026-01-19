@@ -13,9 +13,14 @@ function App() {
   const [selectedDict, setSelectedDict] = useState("oxford_american");
 
   useEffect(() => {
-    console.log("USE EFFECT HAS BEEN CALLED!");
     lookup();
   }, [word]);
+
+  const lookup = () => {
+    Lookup(word).then((result: dictionary.LookupResultWithSuggestion) => {
+      setDictResult(result);
+    });
+  };
 
   const handleLookup = (word: string) => {
     setWord(word);
@@ -26,20 +31,10 @@ function App() {
   };
 
   const handleSelectSuggestWord = (word: string) => {
-    console.log(word);
     setWord(word);
   };
 
-  const lookup = () => {
-    Lookup(word).then((result: dictionary.LookupResultWithSuggestion) => {
-      console.log("WORD: " + word);
-      console.log(result);
-      setDictResult(result);
-    });
-  };
-
   const getResult = () => {
-    console.log("CALL getResult with: ", selectedDict);
     if (dictResult == null) {
       throw "Selected dictionary not found in the results!";
     }
@@ -66,8 +61,10 @@ function App() {
   return (
     <div id="app" className="app">
       <LookupBar
+        word={word}
         onLookup={handleLookup}
         tabs={dictionarySelections}
+        dictionaryId={selectedDict}
         onDictionarySelect={handleDictSelection}
       />
       <div className="main-layout">
