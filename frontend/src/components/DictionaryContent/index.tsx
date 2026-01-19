@@ -15,9 +15,10 @@ const DictionaryContent: React.FC<DictionaryContentProps> = ({
         {dictionaryResult.dictionary || dictionaryResult.full_name}
       </div>
 
-      {dictionaryResult.entries.map((entry) => (
+      {dictionaryResult.entries.map((entry, index) => (
         <div className="dictionary-entry">
           <div
+            key={index}
             className="entry-body"
             data-expanded="false"
             dangerouslySetInnerHTML={{ __html: entry.html }}

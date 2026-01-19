@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dictionary } from "../wailsjs/go/models";
 import "./App.css";
 import LookupBar from "./components/LookupBar";
@@ -7,14 +7,18 @@ import ContentArea from "./components/ContentArea";
 import { Lookup } from "../wailsjs/go/main/App";
 
 function App() {
-  const [word, setWord] = useState("");
+  const [word, setWord] = useState("hello");
   const [dictResult, setDictResult] =
     useState<dictionary.LookupResultWithSuggestion | null>(null);
   const [selectedDict, setSelectedDict] = useState("oxford_american");
 
+  useEffect(() => {
+    console.log("USE EFFECT HAS BEEN CALLED!");
+    lookup();
+  }, [word]);
+
   const handleLookup = (word: string) => {
     setWord(word);
-    lookup();
   };
 
   const handleDictSelection = (dictId: string) => {
@@ -23,6 +27,7 @@ function App() {
 
   const handleSelectSuggestWord = (word: string) => {
     console.log(word);
+    setWord(word);
   };
 
   const lookup = () => {
@@ -34,6 +39,7 @@ function App() {
   };
 
   const getResult = () => {
+    console.log("CALL getResult with: ", selectedDict);
     if (dictResult == null) {
       throw "Selected dictionary not found in the results!";
     }

@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useState } from "react";
+import React, { KeyboardEvent, useEffect, useState } from "react";
 import { Lookup } from "../../../wailsjs/go/main/App";
 import { dictionary } from "../../../wailsjs/go/models";
 import { dictionaryTab } from "../DictionaryTab/model";
@@ -12,10 +12,19 @@ interface LookupBarProps {
   onDictionarySelect: (dictId: string) => void;
 }
 
-const LookupBar: React.FC<LookupBarProps> = ({ onLookup, tabs }) => {
+const LookupBar: React.FC<LookupBarProps> = ({
+  tabs,
+  onLookup,
+  onDictionarySelect,
+}) => {
   const [word, setWord] = useState("");
   const [selectedDict, setSelectedDict] = useState("oxford_american");
   const updateWord = (e: any) => setWord(e.target.value);
+
+  useEffect(() => {
+    console.log("LookupBar has been rendered!");
+  });
+  console.log("LookupBar has been RENDERED!");
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
@@ -27,10 +36,13 @@ const LookupBar: React.FC<LookupBarProps> = ({ onLookup, tabs }) => {
   const handleDictSelection = (dictId: string) => {
     console.log("DICT: ", dictId);
     setSelectedDict(dictId);
+    onDictionarySelect(dictId);
   };
 
   const renderTabs = () => {
-    return tabs.map((tab) => <Tab value={tab.id} label={tab.label} />);
+    return tabs.map((tab) => (
+      <Tab key={tab.id} value={tab.id} label={tab.label} />
+    ));
   };
 
   return (
