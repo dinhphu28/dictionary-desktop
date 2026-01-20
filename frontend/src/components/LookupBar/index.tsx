@@ -7,18 +7,18 @@ import NavTab, { Tab } from "../NavTab";
 import "./style.css";
 
 interface LookupBarProps {
-  word: string;
-  tabs: Array<dictionaryTab.DictionarySelection>;
+  word?: string;
+  tabs?: Array<dictionaryTab.DictionarySelection>;
   onLookup: (word: string) => void;
-  dictionaryId: string;
+  dictionaryId?: string;
   onDictionarySelect: (dictId: string) => void;
 }
 
 const LookupBar: React.FC<LookupBarProps> = ({
-  word,
-  tabs,
+  word = "",
+  tabs = [],
   onLookup,
-  dictionaryId,
+  dictionaryId = "",
   onDictionarySelect,
 }) => {
   let localWord = word;
@@ -40,6 +40,20 @@ const LookupBar: React.FC<LookupBarProps> = ({
       <Tab key={tab.id} value={tab.id} label={tab.label} />
     ));
   };
+
+  if (tabs.length === 0) {
+    return (
+      <header>
+        <div className="top-bar">
+          <LookupInput
+            className="lookup-bar"
+            onChange={updateLocalWord}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header>

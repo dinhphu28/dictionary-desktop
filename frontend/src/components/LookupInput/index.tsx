@@ -2,14 +2,14 @@ import React, { KeyboardEvent, useEffect, useState } from "react";
 import "./style.css";
 
 interface LookupInputProps {
-  value: string;
+  value?: string;
   className: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const LookupInput: React.FC<LookupInputProps> = ({
-  value,
+  value = "",
   className,
   onChange,
   onKeyDown,

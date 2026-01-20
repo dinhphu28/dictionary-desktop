@@ -7,17 +7,22 @@ import ContentArea from "./components/ContentArea";
 import { Lookup } from "../wailsjs/go/main/App";
 
 function App() {
-  const [word, setWord] = useState("hello");
+  const [word, setWord] = useState("");
   const [dictResult, setDictResult] =
     useState<dictionary.LookupResultWithSuggestion | null>(null);
   const [selectedDict, setSelectedDict] = useState("oxford_american");
 
   useEffect(() => {
-    lookup();
+    console.log("APP USE EFFECT ---");
+    if (word !== "") {
+      console.log("Lookup...");
+      lookup();
+    }
   }, [word]);
 
   const lookup = () => {
     Lookup(word).then((result: dictionary.LookupResultWithSuggestion) => {
+      console.log(result);
       setDictResult(result);
     });
   };
@@ -57,6 +62,31 @@ function App() {
           label: r.dictionary,
         }),
     ) ?? [];
+
+  if (word === "") {
+    return (
+      <div id="app" className="app">
+        <LookupBar
+          onLookup={handleLookup}
+          onDictionarySelect={handleDictSelection}
+        />
+        <div className="main-layout">Word is blank!</div>
+      </div>
+    );
+  }
+
+  if (dictResult == null || dictResult.lookup_results == null) {
+    return (
+      <div id="app" className="app">
+        <LookupBar
+          // word={word}
+          onLookup={handleLookup}
+          onDictionarySelect={handleDictSelection}
+        />
+        <div className="main-layout">"Error cause when lookup word!"</div>
+      </div>
+    );
+  }
 
   return (
     <div id="app" className="app">
