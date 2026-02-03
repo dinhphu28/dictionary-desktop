@@ -3,12 +3,13 @@ module dictionary-desktop
 go 1.25.5
 
 require (
-	github.com/dinhphu28/dictionary v0.1.2-rc.3
+	github.com/dinhphu28/dictionary v0.1.4-rc.2
 	github.com/wailsapp/wails/v2 v2.11.0
 	modernc.org/sqlite v1.44.0
 )
 
 require (
+	github.com/BurntSushi/toml v1.6.0 // indirect
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
